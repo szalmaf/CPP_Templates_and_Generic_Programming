@@ -6,10 +6,128 @@
 //  Copyright © 2016 Ferenc Szalma. All rights reserved.
 //
 
+// C++ Primer, Chapter 16, Templates and Generic Programming
+
 #include <iostream>
+#include <vector>
+#include <list>
+using namespace std;
+
+// Template parameter list can't be empty
+template <typename T>
+int compare(const T& v1, const T& v2)
+{
+    if(v1 > v2) return -1;
+    if(v1 < v2) return 1;
+    return 0;
+}
+template <unsigned N, unsigned M>
+int compare(const char (&p1)[N], const char (&p2)[M])
+{
+    cout << N << endl;
+    return strcmp(p1, p2);
+}
+
+class A
+{
+public:
+    int Counter;
+};
+template<A* aa> // non-type template parameter of type pointer to A
+struct Coin
+{
+    static void DoStuff()
+    {
+        aa->Counter;
+    }
+};
+A a;
+A * ap = &a;
+
+// inline is after template
+template <typename T>
+inline T min(const T&, const T&);
+
+// Defining class template
+template <class T> class Queue
+{
+public:
+    Queue();
+    T &front();
+    const T& front() const;
+    void push(const T&);
+    void pop();
+    bool empty() const;
+private:
+    
+};
+
+template <typename T> int compare(const T&, const T&);
+int (*pf1) (const int&, const int&) = compare;
+
+template<class Type> Type calc(const Type* array, int size);
+template<class Type> Type fcn(Type p1, Type p2);
+double dobj;
+float fobj;
+char cobj;
+int ai[5] = {2,3,4,5,6};
+// char c = calc(cobj, 'c');
+// double d = calc(dobj, fobj);
+// int i = fcn(ai, cobj);
+
+void func(int (*) (const int&, const int&)); // func is a pointer to a fn
+void func(int (*) (const string&, const string&));
+// func(compare<int>);
+
+template<typename IT, typename T>
+bool findp(const IT & itb, const IT & ite, const T & val)
+{
+    auto it = itb;
+//    while(it != ite && *it != val) // Iterate until end of list or until it finds the element
+//        ++it;
+//    auto it2 = itb + 2; // Cant't add 2 if itb is a list operator
+    for(; it != ite && *it != val; ++it);
+    if(it != ite)
+        return true;
+    else
+        return false;
+}
+
+template<unsigned N, typename T>
+void print(const T (&itb)[N]) // Takes an array of T type and of size N
+{
+    auto it = itb;
+    for(; it != (itb+N); ++it)
+        cout << *it << endl;
+}
 
 int main(int argc, const char * argv[]) {
     // insert code here...
+    
+    cout << compare(0, 1) << endl;
+    
+    string st1 = "Hello ", st2 = " World";
+    cout << compare(st1, st2) << endl;
+    cout << compare("Hello ", "World") << endl; // int compare(const char (&p1)[N], const char (&p2)[M])
+    
+// error    cout << compare(short(1), 1) << endl;
+
+//    ap is not a const expression, so the Coin template won't compile
+//    Coin<ap>::DoStuff();
+//    cout << a.Counter << endl;
+
+//    Won't compile since the A class does not have operator<, which is needed in compare()
+//    A a1, a2;
+//    compare(a1, a2);
+    
+    vector<int> v{1,2,3,4};
+    bool bv = findp(v.begin(), v.end(), 4);
+    list<string> sl{"hello", "world"};
+    bool bl = findp(sl.begin(), sl.end(), "world");
+    
+    char ca[] = {'a','b','c'};
+    print(ca);
+    
     std::cout << "Hello, World!\n";
     return 0;
 }
