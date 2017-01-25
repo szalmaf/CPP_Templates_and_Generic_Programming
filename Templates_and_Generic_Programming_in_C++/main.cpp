@@ -43,7 +43,6 @@ struct Coin
     }
 };
 A a;
-A * ap = &a;
 
 // inline is after template
 template <typename T>
@@ -105,11 +104,23 @@ void print(const T (&itb)[N]) // Takes a ref to an array of T type and of size N
 }
 
 // 16.6
-//template<typename T>
-//iterator<[], T> begin()
-//{
-//
-//}
+template<unsigned N, typename T>
+const T * beginMy(const T (&arr)[N])
+{
+    return arr;
+}
+template<unsigned N, typename T>
+const T * endMy(const T (&arr)[N])
+{
+    return arr + N;
+}
+
+// 16.7
+template<unsigned N, typename T>
+constexpr unsigned arr_size(const T (&arr)[N])
+{
+    return N;
+}
 
 int main(int argc, const char * argv[]) {
     // insert code here...
@@ -122,9 +133,9 @@ int main(int argc, const char * argv[]) {
     
 // error    cout << compare(short(1), 1) << endl;
 
-//    ap is not a const expression, so the Coin template won't compile
-//    Coin<ap>::DoStuff();
-//    cout << a.Counter << endl;
+//    &p refers to a global object, which has static lifetime, so it can be a non-type template parameter
+    Coin<&a>::DoStuff();
+    cout << a.Counter << endl;
 
 //    Won't compile since the A class does not have operator<, which is needed in compare()
 //    A a1, a2;
@@ -137,6 +148,13 @@ int main(int argc, const char * argv[]) {
     
     char ca[] = {'a','b','c'};
     print(ca);
+    
+    auto aitb = beginMy(ca);
+    auto aite = endMy(ca);
+    for(; aitb != aite; ++aitb)
+        cout << *aitb << endl;
+    
+    unsigned n = arr_size(ca);
     
     std::cout << "Hello, World!\n";
     return 0;
