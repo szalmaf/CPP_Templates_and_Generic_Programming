@@ -13,6 +13,7 @@
 #include <list>
 using namespace std;
 
+// 16.2 compare()
 // Template parameter list can't be empty
 template <typename T>
 int compare(const T& v1, const T& v2)
@@ -79,6 +80,7 @@ void func(int (*) (const int&, const int&)); // func is a pointer to a fn
 void func(int (*) (const string&, const string&));
 // func(compare<int>);
 
+// 16.4
 template<typename IT, typename T>
 bool findp(const IT & itb, const IT & ite, const T & val)
 {
@@ -93,13 +95,21 @@ bool findp(const IT & itb, const IT & ite, const T & val)
         return false;
 }
 
+// 16.5
 template<unsigned N, typename T>
-void print(const T (&itb)[N]) // Takes an array of T type and of size N
+void print(const T (&itb)[N]) // Takes a ref to an array of T type and of size N
 {
     auto it = itb;
     for(; it != (itb+N); ++it)
         cout << *it << endl;
 }
+
+// 16.6
+//template<typename T>
+//iterator<[], T> begin()
+//{
+//
+//}
 
 int main(int argc, const char * argv[]) {
     // insert code here...
