@@ -9,8 +9,11 @@
 // C++ Primer, Chapter 16, Templates and Generic Programming
 
 #include <iostream>
+#include <string>
 #include <vector>
 #include <list>
+#include "./Blob.hpp"
+
 using namespace std;
 
 // 16.2 compare()
@@ -122,6 +125,14 @@ constexpr unsigned arr_size(const T (&arr)[N])
     return N;
 }
 
+
+
+
+
+
+
+
+
 int main(int argc, const char * argv[]) {
     // insert code here...
     
@@ -155,6 +166,9 @@ int main(int argc, const char * argv[]) {
         cout << *aitb << endl;
     
     unsigned n = arr_size(ca);
+    
+    Blob<int> ia;
+    Blob<int> ia2 = {0,1,2,3,4};
     
     std::cout << "Hello, World!\n";
     return 0;
