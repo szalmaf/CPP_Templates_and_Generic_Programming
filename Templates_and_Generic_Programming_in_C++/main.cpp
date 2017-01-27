@@ -126,9 +126,19 @@ constexpr unsigned arr_size(const T (&arr)[N])
 }
 
 
-
-
-
+// 16.19
+template<typename C = vector<int>>
+void prn(const C& c)
+{
+    for(typename C::size_type i = 0; i < c.size(); ++i)
+        cout << c[i] << endl;
+}
+template<typename C = vector<int>>
+void prn2(const C& c)
+{
+    for(auto it = begin(c); it < end(c); ++it)
+        cout << *it << endl;
+}
 
 
 
@@ -180,7 +190,13 @@ int main(int argc, const char * argv[]) {
     auto tpl = tupfn(2);
     auto sqrs3 = squares.fmap(tupfn);
     Blob<tuple<int, int, int>> sqrs4(tupfn, squares); // Use Blob fmap helper constructor instead of fmap above; strangely, need return signature
+    auto a = string();
     
+    
+    prn<vector<int>>({1,2,3});
+    prn2<vector<int>>({1,2,3});
+    prn<>({1,2,3});
+    prn2<>({1,2,3});
     
     
     std::cout << "Hello, World!\n";
