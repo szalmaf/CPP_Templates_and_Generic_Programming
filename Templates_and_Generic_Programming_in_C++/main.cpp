@@ -162,13 +162,17 @@ int main(int argc, const char * argv[]) {
     
     auto aitb = beginMy(ca);
     auto aite = endMy(ca);
-    for(; aitb != aite; ++aitb)
-        cout << *aitb << endl;
+    auto prnt = [](auto x){ cout << x << endl; };
+    for_each(aitb, aite, prnt);
     
     unsigned n = arr_size(ca);
     
     Blob<int> ia;
     Blob<int> ia2 = {0,1,2,3,4};
+    Blob<int> squares = {0,1,2,3,4,5,6,7,8,9};
+    squares.fmap([](auto x){ return x*x; });
+    function<double(int)> sqfn = [](int x){ return x*x; };
+    Blob<double> srqs = squares.fmap(sqfn);
     
     std::cout << "Hello, World!\n";
     return 0;
