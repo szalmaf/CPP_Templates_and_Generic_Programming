@@ -179,7 +179,7 @@ int main(int argc, const char * argv[]) {
     function<tuple<int, int, int>(int)> tupfn = [](auto x){ return std::move(make_tuple(x, x*x, x*x*x)); };
     auto tpl = tupfn(2);
     auto sqrs3 = squares.fmap(tupfn);
-    Blob<tuple<int, int, int>> sqrs4(tupfn, squares);
+    Blob<tuple<int, int, int>> sqrs4(tupfn, squares); // Use Blob fmap helper constructor instead of fmap above
     
     
     

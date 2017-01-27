@@ -25,8 +25,8 @@ public:
     
     Blob();
     Blob(initializer_list<T> il);
-    template<typename U> Blob(function<T(U)> fn, const Blob<U> &b);
-    Blob(function<T(T)> fn, const Blob<T> &b);
+    template<typename U> Blob(function<T(U)> fn, const Blob<U> &b); // fmap helper constructor
+    Blob(function<T(T)> fn, const Blob<T> &b); // fmap helper constructor
     
     size_type size() const { return data->size(); }
     bool empty() const { return data->empty(); }
