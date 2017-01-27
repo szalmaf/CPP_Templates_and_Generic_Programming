@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include <vector>
-#include <functional>
+#include <type_traits>
 
 using namespace std;
 
@@ -25,8 +25,7 @@ public:
     
     Blob();
     Blob(initializer_list<T> il);
-    template<typename U> Blob(function<T(U)> fn, const Blob<U> &b); // fmap helper constructor
-    Blob(function<T(T)> fn, const Blob<T> &b); // fmap helper constructor
+    template<typename Func, typename U> Blob(Func fn, const Blob<U> &b); // fmap helper constructor; Func is T(U)
     
     size_type size() const { return data->size(); }
     bool empty() const { return data->empty(); }
@@ -39,8 +38,7 @@ public:
     typename vector<T>::iterator end() const { return (*data).end(); };
     
     void fmaps(function<T(T)>); // fmap on self
-    template <typename R> Blob<R> fmap(function<R(T)>);
-    Blob<T> fmap(function<T(T)>);
+    template <typename Func> Blob<typename result_of<Func(T)>::type> fmap(Func);
 
 private:
     shared_ptr<vector<T>> data;
@@ -55,14 +53,8 @@ template <typename T>
 Blob<T>::Blob(initializer_list<T> il) : data(make_shared<vector<T>>(il)) {}
 
 template <typename T>
-Blob<T>::Blob(function<T(T)> fn, const Blob<T> &b) : data(make_shared<vector<T>>(b.size()))
-{
-    transform(b.begin(), b.end(), std::begin(*data), fn);
-}
-
-template <typename T>
-template <typename U>
-Blob<T>::Blob(function<T(U)> fn, const Blob<U> &b) : data(make_shared<vector<T>>(b.size()))
+template <typename Func, typename U> // Func signature is T(U)
+Blob<T>::Blob(Func fn, const Blob<U> &b) : data(make_shared<vector<T>>(b.size()))
 {
     transform(b.begin(), b.end(), std::begin(*data), fn);
 }
@@ -102,19 +94,12 @@ void Blob<T>::fmaps(function<T(T)> fn) {
 }
 
 template <typename T>
-template <typename R>
-Blob<R> Blob<T>::fmap(function<R(T)> fn) // Blob<int>::fmap(<double>)
+template <typename Func>
+Blob<typename result_of<Func(T)>::type> Blob<T>::fmap(Func fn) // Blob<int>::fmap(<double>)
 {
-    Blob<R> b(fn, *this); // construct Blob<double> from *this, which is Blob<int>
+    Blob<typename result_of<Func(T)>::type> b(fn, *this); // construct Blob<double> from *this, which is Blob<int>
     return std::move(b);
 }
-template <typename T>
-Blob<T> Blob<T>::fmap(function<T(T)> fn)
-{
-    Blob<T> b(fn, *this);
-    return std::move(b);
-}
-
 
 
 #endif /* Blob_hpp */
