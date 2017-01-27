@@ -175,6 +175,7 @@ int main(int argc, const char * argv[]) {
     auto srqs = squares.fmap(sqfn);
     function<double(int)> tms = [](auto x){ return 2.5 * x; };
     auto srqs2 = squares.fmap(tms);
+//    auto tupfn = [](int x){ return std::move(make_tuple(x, x*x, x*x*x)); }; // Need return signature to work, see below:
     function<tuple<int, int, int>(int)> tupfn = [](auto x){ return std::move(make_tuple(x, x*x, x*x*x)); };
     auto tpl = tupfn(2);
     auto sqrs3 = squares.fmap(tupfn);
