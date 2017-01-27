@@ -38,7 +38,7 @@ public:
     typename vector<T>::iterator end() const { return (*data).end(); };
     
     void fmaps(function<T(T)>); // fmap on self
-    template <typename Func> Blob<typename result_of<Func(T)>::type> fmap(Func);
+    template <typename Func> Blob<result_of_t<Func(T)>> fmap(Func);
 
 private:
     shared_ptr<vector<T>> data;
@@ -95,9 +95,9 @@ void Blob<T>::fmaps(function<T(T)> fn) {
 
 template <typename T>
 template <typename Func>
-Blob<typename result_of<Func(T)>::type> Blob<T>::fmap(Func fn) // Blob<int>::fmap(<double>)
+Blob<result_of_t<Func(T)>> Blob<T>::fmap(Func fn) // Blob<int>::fmap(<double>)
 {
-    Blob<typename result_of<Func(T)>::type> b(fn, *this); // construct Blob<double> from *this, which is Blob<int>
+    Blob<result_of_t<Func(T)>> b(fn, *this); // construct Blob<double> from *this, which is Blob<int>
     return std::move(b);
 }
 
