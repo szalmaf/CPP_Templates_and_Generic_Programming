@@ -22,9 +22,11 @@ public:
     typedef T value_type;
     typedef typename vector<T>::size_type size_type;
     
+    
     Blob();
     Blob(initializer_list<T> il);
-    template<typename U> Blob(function<T(U)> fn, Blob<U> b);
+    template<typename U> Blob(function<T(U)> fn, const Blob<U> &b);
+    Blob(function<T(T)> fn, const Blob<T> &b);
     
     size_type size() const { return data->size(); }
     bool empty() const { return data->empty(); }
@@ -33,10 +35,12 @@ public:
     void pop_back();
     T& back();
     T& operator[](size_type i);
+    typename vector<T>::iterator begin() const { return (*data).begin(); };
+    typename vector<T>::iterator end() const { return (*data).end(); };
     
     void fmaps(function<T(T)>); // fmap on self
-    template <typename R> Blob<R>& fmap(function<R(T)>);
-    Blob<T>& fmap(function<T(T)>);
+    template <typename R> Blob<R> fmap(function<R(T)>);
+    Blob<T> fmap(function<T(T)>);
 
 private:
     shared_ptr<vector<T>> data;
@@ -51,11 +55,16 @@ template <typename T>
 Blob<T>::Blob(initializer_list<T> il) : data(make_shared<vector<T>>(il)) {}
 
 template <typename T>
-template <typename U>
-Blob<T>::Blob(function<T(U)> fn, Blob<U> b) : data(make_shared<vector<T>>())
+Blob<T>::Blob(function<T(T)> fn, const Blob<T> &b) : data(make_shared<vector<T>>(b.size()))
 {
-    (*data).reserve((*b).size());
-    transform(begin(*b), end(*b), begin(*data), fn);
+    transform(b.begin(), b.end(), std::begin(*data), fn);
+}
+
+template <typename T>
+template <typename U>
+Blob<T>::Blob(function<T(U)> fn, const Blob<U> &b) : data(make_shared<vector<T>>(b.size()))
+{
+    transform(b.begin(), b.end(), std::begin(*data), fn);
 }
 
 template <typename T>
@@ -88,22 +97,22 @@ void Blob<T>::pop_back()
 
 template <typename T>
 void Blob<T>::fmaps(function<T(T)> fn) {
-    for_each(begin(*data), end(*data), fn);
+    for_each(std::begin(*data), std::end(*data), fn);
 //    transform(begin(*data), end(*data), begin(*data), fn);
 }
 
 template <typename T>
 template <typename R>
-Blob<R>& Blob<T>::fmap(function<R(T)> fn)
+Blob<R> Blob<T>::fmap(function<R(T)> fn) // Blob<int>::fmap(<double>)
 {
-    Blob<R> b(fn, *this);
-    return b;
+    Blob<R> b(fn, *this); // construct Blob<double> from *this, which is Blob<int>
+    return std::move(b);
 }
 template <typename T>
-Blob<T>& Blob<T>::fmap(function<T(T)> fn)
+Blob<T> Blob<T>::fmap(function<T(T)> fn)
 {
     Blob<T> b(fn, *this);
-    return b;
+    return std::move(b);
 }
 
 

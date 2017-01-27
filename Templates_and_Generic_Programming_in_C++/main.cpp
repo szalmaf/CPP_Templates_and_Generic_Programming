@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 #include <list>
-#include "./Blob.hpp"
+#include "Blob.hpp"
 
 using namespace std;
 
@@ -170,9 +170,17 @@ int main(int argc, const char * argv[]) {
     Blob<int> ia;
     Blob<int> ia2 = {0,1,2,3,4};
     Blob<int> squares = {0,1,2,3,4,5,6,7,8,9};
-    squares.fmap([](auto x){ return x*x; });
-    function<double(int)> sqfn = [](int x){ return x*x; };
-    Blob<double> srqs = squares.fmap(sqfn);
+    squares.fmaps([](auto x){ return x*x; });
+    auto sqfn = [](int x){ return x*x; };
+    auto srqs = squares.fmap(sqfn);
+    function<double(int)> tms = [](auto x){ return 2.5 * x; };
+    auto srqs2 = squares.fmap(tms);
+    function<tuple<int, int, int>(int)> tupfn = [](auto x){ return std::move(make_tuple(x, x*x, x*x*x)); };
+    auto tpl = tupfn(2);
+    auto sqrs3 = squares.fmap(tupfn);
+    Blob<tuple<int, int, int>> sqrs4(tupfn, squares);
+    
+    
     
     std::cout << "Hello, World!\n";
     return 0;
