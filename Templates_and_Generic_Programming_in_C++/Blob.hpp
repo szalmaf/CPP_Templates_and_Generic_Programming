@@ -21,7 +21,8 @@ template <typename T> class Blob
 public:
     typedef T value_type;
     typedef typename vector<T>::size_type size_type;
-    
+    // per http://stackoverflow.com/questions/26665152/compiler-does-not-deduce-template-parameters-map-stdvector-stdvector/26665222?noredirect=1#comment70983575_26665222
+    template<typename F> using result_of_t = typename result_of<F>::type;
     
     Blob();
     Blob(initializer_list<T> il);
