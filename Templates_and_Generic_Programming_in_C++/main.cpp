@@ -125,9 +125,19 @@ constexpr unsigned arr_size(const T (&arr)[N])
     return N;
 }
 
+template <typename T> // T is a container type
+typename T::value_type top(const T& c) // top function returns T's value_type
+{
+    if (!c.emtpy())
+        return c.back();
+    else
+        return typename T::value_type(); // T::value_type() returns the default value for the T containers eleme type's (e.g. for vector<int> it returns a (int)0)
+}
+
+
 
 // 16.19
-template<typename C = vector<int>>
+template<typename C = vector<int>> // Default template argument is vector<int>
 void prn(const C& c)
 {
     for(typename C::size_type i = 0; i < c.size(); ++i)
@@ -140,7 +150,15 @@ void prn2(const C& c)
         cout << *it << endl;
 }
 
-
+template <typename T, typename F = less<T>> // Default template parameter, a function, F, which set to the less<T> class fn
+int compare2(const T& v1, const T& v2, F f = F()) // f = F() says to use less<T> as default; F f without = F(), no default fn, fn must be provided
+{
+    if(f(v1, v2))
+        return -1;
+    else if(f(v2, v1))
+        return 1;
+    return 0;
+}
 
 
 int main(int argc, const char * argv[]) {
@@ -198,6 +216,7 @@ int main(int argc, const char * argv[]) {
     prn<>({1,2,3});
     prn2<>({1,2,3});
     
+    auto comp = compare2(1,2);
     
     std::cout << "Hello, World!\n";
     return 0;
