@@ -160,6 +160,14 @@ int compare2(const T& v1, const T& v2, F f = F()) // f = F() says to use less<T>
     return 0;
 }
 
+template <typename T = int> // default type is int
+class Numbers
+{
+public:
+    Numbers(T n = 0) : n(n) {} // Default argument of constructor is 0
+private:
+    T n;
+};
 
 int main(int argc, const char * argv[]) {
     // insert code here...
@@ -217,6 +225,9 @@ int main(int argc, const char * argv[]) {
     prn2<>({1,2,3});
     
     auto comp = compare2(1,2);
+    
+    Numbers<long double> n1;
+    Numbers<> n1; // Empty tempalte type argument -> need to use default int type as argument
     
     std::cout << "Hello, World!\n";
     return 0;
