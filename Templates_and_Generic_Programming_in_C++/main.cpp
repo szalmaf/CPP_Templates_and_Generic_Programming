@@ -227,7 +227,7 @@ int main(int argc, const char * argv[]) {
     auto comp = compare2(1,2);
     
     Numbers<long double> n1;
-    Numbers<> n1; // Empty tempalte type argument -> need to use default int type as argument
+    Numbers<> n2; // Empty tempalte type argument -> need to use default int type as argument
     
     std::cout << "Hello, World!\n";
     return 0;
