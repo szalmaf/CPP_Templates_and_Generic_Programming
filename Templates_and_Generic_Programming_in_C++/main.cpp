@@ -247,7 +247,7 @@ int main(int argc, const char * argv[]) {
     dd(ip); // Delete int object will writing into cerr
     double *dp = new double;
     DebugDelete()(dp); // Create a temporary DebugDelete object then call it on the double
-    
+    unique_ptr<int, DebugDelete> up(new int, DebugDelete()); // point to and int and has specialize delete: DebugDelete() obj
     
     std::cout << "Hello, World!\n";
     return 0;
