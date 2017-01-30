@@ -27,6 +27,7 @@ public:
     Blob();
     Blob(initializer_list<T> il);
     template<typename Func, typename U> Blob(Func fn, const Blob<U> &b); // fmap helper constructor; Func is T(U)
+    template<typename IT> Blob(IT, IT);
     
     size_type size() const { return data->size(); }
     bool empty() const { return data->empty(); }
@@ -59,6 +60,10 @@ Blob<T>::Blob(Func fn, const Blob<U> &b) : data(make_shared<vector<T>>(b.size())
 {
     transform(b.begin(), b.end(), std::begin(*data), fn);
 }
+
+template<typename T>
+template<typename IT>
+Blob<T>::Blob(IT b, IT e) : data(make_shared<vector<int>>(b, e)) {}
 
 template <typename T>
 void Blob<T>::check(size_type i, const string &msg) const

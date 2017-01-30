@@ -249,6 +249,9 @@ int main(int argc, const char * argv[]) {
     DebugDelete()(dp); // Create a temporary DebugDelete object then call it on the double
     unique_ptr<int, DebugDelete> up(new int, DebugDelete()); // point to and int and has specialize delete: DebugDelete() obj
     
+    vector<int> vi = {1,2,3,4,5};
+    Blob<int> bi(begin(vi), end(vi));
+    
     std::cout << "Hello, World!\n";
     return 0;
 }
