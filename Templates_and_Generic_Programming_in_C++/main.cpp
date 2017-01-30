@@ -169,6 +169,19 @@ private:
     T n;
 };
 
+class DebugDelete // Class can replace `delete`; class has internal template function, the call operator
+{
+public:
+    DebugDelete(ostream &s = cerr) : os(s) {}
+    template<typename T> void operator()(T *p) const
+    {
+        cout << "Deleting unique pointer: " << endl;
+        delete p;
+    }
+private:
+    ostream &os;
+};
+
 int main(int argc, const char * argv[]) {
     // insert code here...
     
@@ -228,6 +241,13 @@ int main(int argc, const char * argv[]) {
     
     Numbers<long double> n1;
     Numbers<> n2; // Empty tempalte type argument -> need to use default int type as argument
+    
+    int *ip = new int;
+    DebugDelete dd; // Deleter object
+    dd(ip); // Delete int object will writing into cerr
+    double *dp = new double;
+    DebugDelete()(dp); // Create a temporary DebugDelete object then call it on the double
+    
     
     std::cout << "Hello, World!\n";
     return 0;
