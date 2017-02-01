@@ -182,6 +182,33 @@ private:
     ostream &os;
 };
 
+// 16.25
+// extern template class vector<string> // This declaration means that vector<string> template wont be instantiated in this file
+// template class vector<Sales_data> // This declaration means that the vector<Sales_data> template will be instantiated in this file
+
+// 16.26
+class NoDefault
+{
+public:
+    NoDefault();
+    NoDefault(int i)
+    {};
+private:
+    int i;
+};
+
+// 16.27
+template<typename T> class Stack {};
+void f1(Stack<char> x) {};
+class Exercise
+{
+    Stack<double> & rsd;
+    Stack<int> si;
+};
+
+
+
+
 int main(int argc, const char * argv[]) {
     // insert code here...
     
@@ -251,6 +278,16 @@ int main(int argc, const char * argv[]) {
     
     vector<int> vi = {1,2,3,4,5};
     Blob<int> bi(begin(vi), end(vi));
+    
+//    NoDefault nd; // no default constructor defined (only declared) so this wont work
+    NoDefault nd2(1);
+    vector<NoDefault> vnd;
+    
+    Stack<char> *sc;
+    f1(*sc);
+    int iObj = sizeof(Stack<string>);
+    
+    
     
     std::cout << "Hello, World!\n";
     return 0;
