@@ -12,12 +12,15 @@
 #include <stdio.h>
 #include <vector>
 #include <type_traits>
+#include <functional>
+#include "BlobPtr.hpp"
 
 using namespace std;
 
 // 16.1.2 Class Templates section
 template <typename T> class Blob
 {
+    friend class BlobPtr<T>;
 public:
     typedef T value_type;
     typedef typename vector<T>::size_type size_type;

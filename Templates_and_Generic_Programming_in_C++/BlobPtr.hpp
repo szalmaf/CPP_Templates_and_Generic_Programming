@@ -12,19 +12,24 @@
 #include <stdio.h>
 #include <memory>
 #include <vector>
+#include "Blob.hpp"
 
 using namespace std;
+
+
+template <typename> class Blob; // forward declaration, needed in BlobPtr constructor
 
 template<typename T>
 class BlobPtr
 {
 public:
     BlobPtr() : curr(0) {}
-    BlobPtr(BlobPtr &a, size_t sz = 0) : wptr(a.data), curr(sz) {}
+    BlobPtr(Blob<T> &a, size_t sz = 0) : wptr(a.data), curr(sz) {}
     
     T& operator*() const
     {
         auto p = check(curr, "dereference past end");
+        return (*p)[curr];
     }
     BlobPtr& operator++(); // prefix operators
     BlobPtr& operator--();
@@ -35,6 +40,29 @@ private:
 };
 
 
+template<typename T>
+BlobPtr<T>& BlobPtr<T>::operator++()
+{
+    check(++curr, "beyond end of container");
+    return *this;
+}
+
+template<typename T>
+BlobPtr<T>& BlobPtr<T>::operator--()
+{
+    check(--curr, "before start of container");
+    return *this;
+}
+
+template<typename T>
+shared_ptr<vector<T>> BlobPtr<T>::check(size_t s, const string& str) const
+{
+    auto srdp = wptr.lock();
+    if(s < srdp->size())
+        return move(srdp);
+    else
+        throw out_of_range(str);
+}
 
 
 #endif /* BlobPtr_hpp */

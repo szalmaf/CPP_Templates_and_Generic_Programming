@@ -13,6 +13,7 @@
 #include <vector>
 #include <list>
 #include "Blob.hpp"
+#include "BlobPtr.hpp"
 
 using namespace std;
 
@@ -25,6 +26,13 @@ int compare(const T& v1, const T& v2)
     if(v1 < v2) return 1;
     return 0;
 }
+//template <unsigned N, unsigned M>
+//int compare(char (&p1)[N], char (&p2)[M])
+//{
+//    cout << N << endl;
+//    return strcmp(p1, p2);
+//}
+
 template <unsigned N, unsigned M>
 int compare(const char (&p1)[N], const char (&p2)[M])
 {
@@ -206,7 +214,8 @@ class Exercise
     Stack<int> si;
 };
 
-
+template <typename T> void f1(T, T) {};
+template <typename T1, typename T2> void f2(T1, T2) {};
 
 
 int main(int argc, const char * argv[]) {
@@ -215,8 +224,10 @@ int main(int argc, const char * argv[]) {
     cout << compare(0, 1) << endl;
     
     string st1 = "Hello ", st2 = " World";
+    char *ch1 = "Hello ", *ch2 = "World";
     cout << compare(st1, st2) << endl;
     cout << compare("Hello ", "World") << endl; // int compare(const char (&p1)[N], const char (&p2)[M])
+    cout << compare(ch1, ch2);
     
 // error    cout << compare(short(1), 1) << endl;
 
@@ -286,6 +297,22 @@ int main(int argc, const char * argv[]) {
     Stack<char> *sc;
     f1(*sc);
     int iObj = sizeof(Stack<string>);
+    BlobPtr<int> bp(bi); cout << *bp << ", ";
+    auto xx = ++bp; cout << *bp << ", ";
+    xx = --bp; cout << *bp << endl;
+    
+    compare("hi", "world");
+//    compare("bye", "dad"); // call to compare is ambiguous (const &T) vs const (*pc)[N]
+
+    int i = 0, j = 42, *p1 = &i, *p2 = &j;
+    const int *cp1 = &i, *cp2 = &j;
+    f1(p1,p2);
+    f2(p1,p2);
+    f1(cp1,cp2);
+    f2(cp1,cp2);
+//    f1(p1,cp1); // cannot call on (*, const *) fn on (T, T)
+    f2(p1,cp1);
+    
     
     
     
