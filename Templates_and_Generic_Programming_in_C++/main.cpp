@@ -217,6 +217,25 @@ class Exercise
 template <typename T> void f1(T, T) {};
 template <typename T1, typename T2> void f2(T1, T2) {};
 
+// 16.40
+template <typename It>
+auto fcn3(It beg, It end) -> decltype(*beg + 0)
+{
+    return *beg;
+}
+
+// 16.41
+// Trailing return type in decltype should guarantee to return sum
+// If e.g. long long is exhausted, it won't work
+template <typename T>
+auto sum(T x, T y) -> decltype(x + y)
+{
+    return x + y;
+}
+
+
+
+
 
 int main(int argc, const char * argv[]) {
     // insert code here...
@@ -313,8 +332,12 @@ int main(int argc, const char * argv[]) {
 //    f1(p1,cp1); // cannot call on (*, const *) fn on (T, T)
     f2(p1,cp1);
     
+//    auto v3 = {'a', 'b', 'c'};
+//    auto v3 = {1,2,3};
+    auto v3 = {2.1, 2.2, 2.3};
+    auto pt = fcn3(v3.begin(), v3.end()); //returns int, int, couble
     
-    
+    auto s = sum(10000000000000000000, 10000000000000000000);
     
     std::cout << "Hello, World!\n";
     return 0;
