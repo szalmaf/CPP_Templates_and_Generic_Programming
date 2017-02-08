@@ -106,7 +106,7 @@ template <typename T>
 template <typename Func>
 Blob<result_of_t<Func(T)>> Blob<T>::fmap(Func fn) // Blob<int>::fmap(<double>)
 {
-    Blob<result_of_t<Func(T)>> b(fn, *this); // construct Blob<double> from *this, which is Blob<int>
+    Blob<result_of_t<Func(T)>> b(fn, *this); // construct e.g. Blob<double> from *this, which is Blob<int>
     return std::move(b);
 }
 

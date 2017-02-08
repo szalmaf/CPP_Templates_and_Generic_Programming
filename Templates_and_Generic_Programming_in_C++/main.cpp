@@ -233,12 +233,49 @@ auto sum(T x, T y) -> decltype(x + y)
     return x + y;
 }
 
+class myInt
+{
+public:
+    myInt(const int& i = 0) : i(i) {}
+    myInt& operator++()
+    {
+        ++i;
+        return *this;
+    }
+    myInt& operator--()
+    {
+        --i;
+        return *this;
+    }
+private:
+    int i;
+};
 
 
+// 16.42
+template <typename T> void g(T&& val)
+{
+    int a = 1;
+}
+template <typename T> void gT(T val)
+{
+    int a = 1;
+}
+template <typename T> void gCrt(const T& val)
+{
+    int a = 1;
+}
+template <typename T> void gv(T&& val)
+{
+    vector<T> v;
+}
 
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
+
+    myInt mi;
+    auto& mi2 = ++mi;
+    auto& mi3 = --mi;
     
     cout << compare(0, 1) << endl;
     
@@ -318,7 +355,7 @@ int main(int argc, const char * argv[]) {
     int iObj = sizeof(Stack<string>);
     BlobPtr<int> bp(bi); cout << *bp << ", ";
     auto xx = ++bp; cout << *bp << ", ";
-    xx = --bp; cout << *bp << endl;
+    auto yy = --bp; cout << *bp << endl;
     
     compare("hi", "world");
 //    compare("bye", "dad"); // call to compare is ambiguous (const &T) vs const (*pc)[N]
@@ -338,6 +375,27 @@ int main(int argc, const char * argv[]) {
     auto pt = fcn3(v3.begin(), v3.end()); //returns int, int, couble
     
     auto s = sum(10000000000000000000, 10000000000000000000);
+    
+    int ii = 1;
+    const int ci = ii;
+    g(ii); // int&
+    g(ci); // const int&
+    g(ii * ci); // int&&
+    gT(ii);
+    gT(ci);
+    gT(ii * ci);
+    gCrt(ii);
+    gCrt(ci);
+    gCrt(ii * ci);
+    gv(42);
+//    gv(ii);  wont work: T will be int&, and vector<int&> can't be instantiated
+    
+    string s1("hi!"), s2;
+    s2 = move(string("bye!"));
+    s2 = move(s1);
+    
+    int iii = 1;
+    int &&rvr = move(iii);
     
     std::cout << "Hello, World!\n";
     return 0;
